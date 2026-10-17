@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Batik Fraktal</title>
+    <title>Batik Fraktal - Kelompok 1</title>
     <style>
         * {
             box-sizing: border-box;
@@ -39,6 +39,32 @@
             color: #4a2c11;
             font-size: 32px;
             margin-bottom: 12px;
+        }
+
+        /* Tampilan Anggota Kelompok */
+        .group-box {
+            background-color: #f5efe6;
+            border: 1px solid #dcd0bd;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .group-box h3 {
+            color: #8b4513;
+            font-size: 18px;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed #c0b098;
+            padding-bottom: 4px;
+        }
+
+        .group-box ol {
+            margin-left: 20px;
+            color: #3d2b1f;
+            font-size: 14.5px;
+            line-height: 1.6;
+            font-weight: 600;
         }
 
         .intro-box {
@@ -170,6 +196,19 @@
 <div class="container">
     <header>
         <h1>Batik Fraktal</h1>
+        
+        <!-- Bagian Kelompok -->
+        <div class="group-box">
+            <h3>Kelompok 1</h3>
+            <ol>
+                <li>Yuthi Afina Hutagalung</li>
+                <li>Andreo Bechkam L. Tobing</li>
+                <li>Syifa May Sarah Br. Sitompul</li>
+                <li>Nur Naiya Khautsah</li>
+                <li>Aulia Sasky Suryadifara</li>
+            </ol>
+        </div>
+
         <div class="intro-box">
             <p><strong>Apa itu Batik Fraktal?</strong><br>
             Batik Fraktal adalah inovasi seni batik yang menggabungkan keindahan seni tradisional nusantara dengan ilmu matematika fraktal. Fraktal adalah bentuk geometri yang memiliki sifat <em>self-similarity</em> (keserupaan diri), di mana pola dasarnya akan terus berulang dan mirip dengan bentuk keseluruhannya meskipun diperbesar atau diperkecil dalam berbagai skala. Penggunaan algoritma matematika memungkinkan terciptanya variasi motif baru yang presisi, unik, dan penuh warna tanpa menghilangkan esensi estetika ragam hias batik.</p>
@@ -259,7 +298,7 @@
         </div>
 
         <div class="canvas-wrapper">
-            <!-- Canvas diubah menjadi 800x800 -->
+            <!-- Canvas Resolusi 800x800 -->
             <canvas id="batikCanvas" width="800" height="800"></canvas>
         </div>
     </main>
@@ -581,19 +620,34 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // --- Fungsi Simpan JPG (Diperbaiki Kompatibilitasnya) ---
     function saveAsJpg() {
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = canvas.width;
         tempCanvas.height = canvas.height;
         const tempCtx = tempCanvas.getContext('2d');
+        
+        // Memastikan warna latar belakang krem terisi penuh
         tempCtx.fillStyle = '#fffefb';
         tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
         tempCtx.drawImage(canvas, 0, 0);
 
-        const link = website.createElement('a');
-        link.download = 'batik-fraktal.jpg';
-        link.href = tempCanvas.toDataURL('image/jpeg', 0.95);
-        link.click();
+        // Ekspor menggunakan toBlob (Aman di GitHub Pages & Seluler)
+        tempCanvas.toBlob((blob) => {
+            if (!blob) return;
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'batik-fraktal.jpg';
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }, 100);
+        }, 'image/jpeg', 0.95);
     }
 });
 </script>
